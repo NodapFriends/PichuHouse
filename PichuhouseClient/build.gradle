@@ -1,6 +1,8 @@
 base {
-    archivesName = mod_id
+    archivesName = mod_name
 }
+
+version = mod_version
 
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.

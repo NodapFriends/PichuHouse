@@ -14,14 +14,17 @@ tasks.named('wrapper', Wrapper).configure {
     distributionType = Wrapper.DistributionType.BIN
 }
 
-version = mod_version
-group = mod_group_id
+tasks.jar {
+    enabled = false
+}
 
 subprojects {
     apply plugin: 'java-library'
     apply plugin: 'net.neoforged.moddev'
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'idea'
+
+    group = mod_group_id
 
     compileKotlin {
         kotlinOptions.jvmTarget = "21"
@@ -147,6 +150,7 @@ subprojects {
         // For more info:
         // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
         // http://www.gradle.org/docs/current/userguide/dependency_management.html
+        implementation 'thedarkcolour:kotlinforforge-neoforge:5.10.0'
     }
 
     tasks.withType(JavaCompile).configureEach {
@@ -161,4 +165,12 @@ subprojects {
         }
     }
 
+    tasks.register('copyJars', Copy) {
+        from project.file('build/libs')
+        include '*.jar'
+        into rootProject.file('build/libs')
+        into file(mod_build_path)
+    }
+
+    jar.finalizedBy tasks.named('copyJars')
 }
